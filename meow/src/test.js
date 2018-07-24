@@ -12,10 +12,10 @@ var keys = {
 
 var Twitter = new TwitterStream(keys, false);
 Twitter.stream('statuses/filter', {
-  track: ['cats','adopt'],
+  track: ['gato','adoção'],
   has: 'images',
   place_country: 'ISO 3166-2:BR',
-  '#': 'cats'
+  '#': ['cats', 'gato', 'adoção']
 });
 
 Twitter.pipe(fs.createWriteStream('tweets.json'));
