@@ -19,7 +19,7 @@ class Nav extends Component {
   render() {
     return(
       <div>
-        <Navbar color="light" light expand="md">
+        <Navbar color="dark" dark expand="md">
           <NavbarBrand href="/">Magracats</NavbarBrand>
           <RSNav className="ml-auto" navbar>
             <NavItem>
