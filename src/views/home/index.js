@@ -2,10 +2,29 @@ import React, { Component } from 'react'
 import Nav from './components/nav'
 import Card from '../../components/card'
 import { Row, Col } from 'reactstrap'
+import TwitterClient from '../../utils/twitter-client'
 
 class Home extends Component {
   constructor(props) {
     super(props)
+    this.twitterClient = new TwitterClient(['gato', 'adoção', 'gatos'], 'images', '')
+    this.twitterStream = this.twitterClient.createStream()
+  }
+
+  handleTwitter() {
+    let obj = this.twitterStream.on('data', (obj) => {
+      return obj
+    })
+    return (
+      <Row>
+        <Card
+          tweetImg={obj.media_url}
+          tweet={obj.text}
+          tweetUrl={obj.url}
+        >
+        </Card>
+      </Row>
+    )
   }
 
   render() {
@@ -13,20 +32,12 @@ class Home extends Component {
       <div>
         <Nav/>
         <br/>
-        <Row>
-          <Col sm="6">
-            <Card
-              tweetImg="http://pbs.twimg.com/media/Di6GVEnU4AAQQfq.jpg"
-              tweet="RT @Anocas21: LADYBUG E GATO NOIR FIQUEM LOGO JUNTOS PFF PAREM COM ESTE SOFRIMENTO CONSTANTE"
-              tweetUrl="https://t.co/dunmd2nisG"
-            >
-            </Card>
-          </Col>
-          <Col sm="6">
-          <Card></Card>
-          </Col>
-        </Row>
-      </div>
+          <Col sm="4"></Col>
+            <Col sm="4">
+              {this.handleTwitter()}
+            </Col>
+          <Col sm="4"/>
+        </div>
     )
   }
 }
