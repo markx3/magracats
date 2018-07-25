@@ -4,28 +4,30 @@ import Card from '../../components/card'
 import { Row, Col } from 'reactstrap'
 import TwitterClient from '../../utils/twitter-client'
 import ReactDOM from 'react-dom'
+import openSocket from 'socket.io-client'
 
 class Home extends Component {
   constructor(props) {
     super(props)
-    this.twitter= new TwitterClient(['gato', 'adoção', 'gatos'], 'images', '')
-    this.twitterClient = this.twitter.get()
+    this.state = {
+      tweets: []
+    }
+    this.socket = openSocket('http://localhost:8000')
+    this.tweets = []
+    this.subscribeToTwitter()
+
   }
 
-  handleTwitter() {
-    this.twitterClient.get('search/tweets', {q: 'gatos adoção'}, (error, tweet, response) => {
-      ReactDOM.render(
-        (<Row>
-          <Card
-            tweetImg={tweet.media_url}
-            tweet={tweet.text}
-            tweetUrl={tweet.url}
-          >
-          </Card>
-        </Row>),
-        document.getElementById('main-col')
-      )
+  subscribeToTwitter() {
+    this.socket.on('twitter', tweet => {
+      if (tweet.entities.media) {
+        console.log(this.state.tweets)
+        this.setState({
+          tweets: [...this.state.tweets, tweet]
+        })
+      }
     })
+    this.socket.emit('subscribeToTwitter', 10000)
   }
 
   render() {
@@ -33,12 +35,25 @@ class Home extends Component {
       <div>
         <Nav/>
         <br/>
-          <Col sm="4"></Col>
-            <Col sm="4" id="main-col">
-              {this.handleTwitter()}
+          <Row>
+            <Col sm="4"></Col>
+            <Col sm="4">
+              <div id="main-col" center>
+                { this.state.tweets.forEach(tweet => {
+                  <Row>
+                    <Card
+                      tweetImg={tweet.entities.media[0].media_url}
+                      tweet={tweet.text}
+                      tweetUrl={'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id}
+                    >
+                    </Card>
+                  </Row>
+                })}
+              </div>
             </Col>
-          <Col sm="4"/>
-        </div>
+            <Col sm="4"></Col>
+        </Row>
+      </div>
     )
   }
 }
