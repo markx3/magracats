@@ -14,7 +14,6 @@ class App extends Component {
   componentDidMount() {
     this.twitterClient = new TwitterClient(['gato', 'adoção', 'gatos'], 'images', this.location)
     this.twitterStream = this.twitterClient.createStream()
-    debugger
   }
 
   render() {
