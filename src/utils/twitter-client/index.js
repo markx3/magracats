@@ -14,16 +14,21 @@ class TwitterClient {
     this.url = "https://api.twitter.com/1.1/search/tweets.json"
   }
 
-  createStream() {
-    let TwitterStream = require('twitter-stream-api')
-    this.Twitter = new TwitterStream(this.keys, false);
-    this.Twitter.stream('statuses/filter', {
-            track: this.track,
-            has: this.has,
-            locations: this.locations
-          })
-    return this.Twitter
+  get() {
+    let Twitter = require('twitter')
+    let client = new Twitter(this.keys)
+    return client
+
   }
+
+  // createStream() {
+  //   let Twitter = require('twitter')
+  //   this.Twitter = new TwitterStream(this.keys, false);
+  //   this.Twitter.stream('statuses/filter', {
+  //           track: this.track,
+  //         })
+  //   return this.Twitter
+  // }
 }
 
 export default TwitterClient

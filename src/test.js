@@ -10,13 +10,17 @@ var keys = {
   token_secret: "x81KdY3qQyBcV4P47V50nwJ3wzzeWwq5vbi14vamtJNkR"
 };
 
-var Twitter = new TwitterStream(keys, false);
+var Twitter = new TwitterStream(keys, true);
 Twitter.stream('statuses/filter', {
   track: ['gato','adoção'],
   has: 'images',
-  locations: '[[[-49.0126351918,-26.4449668264],[-48.6892145804,-26.4449668264],[-48.6892145804,-26.1295210113],[-49.0126351918,-26.1295210113],[-49.0126351918,-26.4449668264]]],
+  // locations: '[[[-49.0126351918,-26.4449668264],[-48.6892145804,-26.4449668264],[-48.6892145804,-26.1295210113],[-49.0126351918,-26.1295210113],[-49.0126351918,-26.4449668264]]],
   '#': ['cats', 'gato', 'adoção']
 });
+
+Twitter.on('data', (obj) => {
+  console.log(obj)
+})
 
 Twitter.pipe(fs.createWriteStream('tweets.json'));
 
