@@ -18,22 +18,24 @@ io.on('connection', (client) => {
     }, interval)
   })
 
-  client.on('subscribeToTwitter', () => {
+  client.on('subscribeToTwitter', (interval) => {
     // TODO: Switch to search, perhaps
-    twitterClient.stream(
-      'statuses/filter',
-      {
-        track: 'cat,kitten,kitty',
-        has: 'images',
-      },
-      (stream) => {
-        stream.on('data', (event) => {
-          client.emit('twitter', event)
+    console.log('client is subscribing to twitter with interval', interval)
+    setInterval(() => {
+      twitterClient.get(
+        'search/tweets',
+        {
+          q: "cat adoption filter:media -filter:retweets",
+          result_type: "mixed",
+          count: 100
+         // geocode: "26.2864917,-48.9949697,10mi"
+        },
+        (error, tweets, response) => {
+          if (error) console.log(error)
+          console.log(response)
+          client.emit('twitter', tweets)
         })
-        stream.on('error', (error) => {
-          console.log('error', error)
-        })
-      })
+    }, interval)
   })
 
 })

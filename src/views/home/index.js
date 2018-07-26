@@ -10,24 +10,28 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      tweets: []
+      tweets: null,
+      mounted: false
     }
     this.socket = openSocket('http://localhost:8000')
-    this.tweets = []
     this.subscribeToTwitter()
 
   }
 
   subscribeToTwitter() {
-    this.socket.on('twitter', tweet => {
-      if (tweet.entities.media) {
-        console.log(this.state.tweets)
-        this.setState({
-          tweets: [...this.state.tweets, tweet]
-        })
-      }
+    this.socket.on('twitter', tweetCollection => {
+      this.setState({
+        tweets: tweetCollection.statuses
+      })
+      console.log(this.state.tweets)
     })
-    this.socket.emit('subscribeToTwitter', 10000)
+    this.socket.emit('subscribeToTwitter', 15000)
+  }
+
+  componentDidMount() {
+    this.setState({
+      interval: 15000
+    })
   }
 
   render() {
@@ -39,15 +43,20 @@ class Home extends Component {
             <Col sm="4"></Col>
             <Col sm="4">
               <div id="main-col" center>
-                { this.state.tweets.forEach(tweet => {
-                  <Row>
-                    <Card
-                      tweetImg={tweet.entities.media[0].media_url}
-                      tweet={tweet.text}
-                      tweetUrl={'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id}
-                    >
-                    </Card>
-                  </Row>
+                { this.state.tweets && this.state.tweets.map(tweet => {
+                  if (tweet.entities.media) {
+                   return (
+                    <Row>
+                      <Card
+                        tweetImg={tweet.entities.media && tweet.entities.media[0].media_url}
+                        tweet={tweet.text}
+                        tweetUrl={'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str}
+                      >
+                      </Card>
+                      <br/>
+                    </Row>
+                    )
+                  }
                 })}
               </div>
             </Col>
