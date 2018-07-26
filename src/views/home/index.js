@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Card from '../../components/card'
-import { Row, Col } from 'reactstrap'
+import { Row, Col, Card as RSCard, CardBody, CardImg, CardText } from 'reactstrap'
 import openSocket from 'socket.io-client'
 
 class Home extends Component {
@@ -10,8 +10,6 @@ class Home extends Component {
       tweets: null,
       mounted: false
     }
-    this.socket = openSocket('http://localhost:8000')
-    this.subscribeToTwitter()
   }
 
   subscribeToTwitter() {
@@ -21,7 +19,12 @@ class Home extends Component {
       })
       console.log(this.state.tweets)
     })
-    this.socket.emit('subscribeToTwitter', 15000)
+    this.socket.emit('subscribeToTwitter', 10000)
+  }
+
+  componentWillMount() {
+    this.socket = openSocket('http://localhost:8000')
+    this.subscribeToTwitter()
   }
 
   componentDidMount() {
@@ -46,6 +49,17 @@ class Home extends Component {
   }
 }
 
+renderLoading() {
+  return (
+    <RSCard>
+    <CardImg src="https://i.kym-cdn.com/photos/images/original/000/480/551/b04.gif"></CardImg>
+      <CardBody>
+        <CardText><div class="text-center"><h3>Loading...</h3></div></CardText>
+      </CardBody>
+    </RSCard>
+  )
+}
+
   render() {
     return (
       <div>
@@ -53,7 +67,10 @@ class Home extends Component {
           <Row>
             <Col sm="4"></Col>
             <Col sm="4">
-              <div id="main-col" center>
+              <div id="main-col" className="text-center" center>
+                <h2>KittyTweet Explorer</h2>
+                <br/>
+                {!this.state.tweets && this.renderLoading() }
                 { this.state.tweets && this.state.tweets.map(this.renderTweets) }
               </div>
             </Col>
