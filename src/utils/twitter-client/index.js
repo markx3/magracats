@@ -1,5 +1,3 @@
-"use strict"
-
 class TwitterClient {
   constructor(track, has, locations) {
     this.track = track

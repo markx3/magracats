@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
-import Nav from './components/nav'
 import Card from '../../components/card'
 import { Row, Col } from 'reactstrap'
-import TwitterClient from '../../utils/twitter-client'
-import ReactDOM from 'react-dom'
 import openSocket from 'socket.io-client'
 
 class Home extends Component {
@@ -52,7 +49,6 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Nav/>
         <br/>
           <Row>
             <Col sm="4"></Col>

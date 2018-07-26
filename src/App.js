@@ -1,19 +1,55 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 import Home from './views/home'
+import About from './views/about'
+
+import { Nav as RSNav, 
+		Navbar, 
+		NavItem, 
+		NavLink, 
+		NavbarBrand } from 'reactstrap'
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 
 class App extends Component {
-
-  constructor() {
-    super()
-    this.location = [[[-49.0126351918, -26.4449668264], [-48.6892145804, -26.4449668264], [-48.6892145804, -26.1295210113], [-49.0126351918, -26.1295210113], [-49.0126351918, -26.4449668264]]]
+  constructor(props) {
+    super(props)
+    this.toggle = this.toggle.bind(this)
+    this.state = {
+      isOpen: false
+    }
   }
 
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen
+    })
+  }
+  
   render() {
-    return (
-      <Home/>
-    ); 
+    return(
+      <Router>
+        <div>
+          <Navbar color="dark" dark expand="md">
+            <NavbarBrand href="/">Magracats</NavbarBrand>
+            <RSNav className="ml-auto" navbar>
+              <NavItem>
+                <NavLink> 
+                  <Link to="/views/home">Home</Link>
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink>
+                  <Link to="/views/about">Sobre</Link>
+                </NavLink>
+              </NavItem>
+            </RSNav>
+          </Navbar>
+          <Route path="/views/home" component={Home}/>
+          <Route path="/views/about" component={About}/>
+        </div>
+      </Router>
+    )
   }
 }
 

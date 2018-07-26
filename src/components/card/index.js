@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { Card as RSCard, CardBody, Button, CardTitle, CardImg, CardText, Row, Col  } from 'reactstrap'
-import styles from './styles.css'
-
+import { Card as RSCard, CardBody, Button, CardImg, CardText } from 'reactstrap'
 class Card extends Component {
 
   constructor(props) {
