@@ -9,6 +9,7 @@ const twitter = require('twitter')
 let twitterClient = twitter(keys)
 
 const port = 8000
+let firstRun = true
 
 io.on('connection', (client) => {
   client.on('subscribeToTimer', (interval) => {
@@ -34,11 +35,14 @@ io.on('connection', (client) => {
           if (error) console.log(error)
           console.log(response)
           client.emit('twitter', tweets)
+          firstRun = false
         })
-    }, interval)
+    }, 15000)
   })
-
 })
+
+console.log(firstRun)
 io.listen(port)
+console.log(firstRun)
 console.log('listening on port', port)
 

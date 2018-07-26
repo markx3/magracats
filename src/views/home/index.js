@@ -15,7 +15,6 @@ class Home extends Component {
     }
     this.socket = openSocket('http://localhost:8000')
     this.subscribeToTwitter()
-
   }
 
   subscribeToTwitter() {
@@ -34,6 +33,22 @@ class Home extends Component {
     })
   }
 
+  renderTweets(tweet) {
+    if (tweet.entities.media) {
+      return (
+        <Row>
+          <Card
+            tweetImg={tweet.entities.media && tweet.entities.media[0].media_url}
+            tweet={tweet.text}
+            tweetUrl={'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str}
+          >
+          </Card>
+          <br />
+        </Row>
+      )
+  }
+}
+
   render() {
     return (
       <div>
@@ -43,21 +58,7 @@ class Home extends Component {
             <Col sm="4"></Col>
             <Col sm="4">
               <div id="main-col" center>
-                { this.state.tweets && this.state.tweets.map(tweet => {
-                  if (tweet.entities.media) {
-                   return (
-                    <Row>
-                      <Card
-                        tweetImg={tweet.entities.media && tweet.entities.media[0].media_url}
-                        tweet={tweet.text}
-                        tweetUrl={'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str}
-                      >
-                      </Card>
-                      <br/>
-                    </Row>
-                    )
-                  }
-                })}
+                { this.state.tweets && this.state.tweets.map(this.renderTweets) }
               </div>
             </Col>
             <Col sm="4"></Col>
